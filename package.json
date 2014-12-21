@@ -1,0 +1,18 @@
+{
+  "name": "readmandarin",
+  "version": "0.0.0",
+  "description": "an app to practice reading mandarin",
+  "main": "example.js",
+  "dependencies": {
+    "express": "^4.10.6",
+    "mongodb": "^1.4.25",
+    "mongoose": "^3.8.21",
+    "request": "^2.51.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,43 @@
+https://api.ted.com/v1/talks/1/subtitles.json?api-key=thbn678cjn86b5jtunacgque&language=en
+https://api.ted.com/v1/talks/1/subtitles.json?api-key=thbn678cjn86b5jtunacgque&language=zh-cn
+
+https://api.ted.com/v1/talks.json?api-key=thbn678cjn86b5jtunacgque&language=zh-cn
+
+http://developer.ted.com/API_Docs
+
+
+mandarinspot / ted talk mashup
+
+dual view --> english left, mandarin right
+pinyin --> mandarin + pinyin
+translation --> mandarin + definitions
+
+view / challenge
+
+view = full ui
+challenge = mandarin + fill in pinyin + rollover def + option to view english
+
+todo:
+----
+get en/zh for ted talk
+save en/zh for ted talk
+pass zh through mandarin spot
+how to save/display output
+
+talk
+  - id, title, link, etc
+  - zn vocab from mandarin spot
+
+subtitle
+  - en
+  - zh
+  - zh annotated with pinyin
+  - id, time, link, etc
+  - talk_id
+
+talk has many subtitles
+
+node + nosql + angular
+
+API -->
+  
