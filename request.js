@@ -1,6 +1,9 @@
 var request = require('request'),
     cheerio = require('cheerio'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    fs = require('fs');
+
+var Talk = require('./models/talk').Talk;
 
 ReadMandarin = RM = {};
 
@@ -18,50 +21,115 @@ RM.subtitleUrl = function(ted_talk_id, language) {
   return 'https://api.ted.com/v1/talks/' + ted_talk_id + '/subtitles.json?api-key=' + RM.TED.API_KEY + '&language=' + language;
 };
 
-RM.parseAndSave = function(ted_talk_id) {
-  var english_url = RM.subtitleUrl(ted_talk_id, RM.TED.ENGLISH_CODE),
-      mandarin_url = RM.subtitleUrl(ted_talk_id, RM.TED.MANDARIN_CODE);
+RM.mandarinspot = RM.ms = {};
+RM.ms.URL = 'http://mandarinspot.com/annotate';
+RM.ms.defaultFormData = function() {
+  return {
+    e: 'utf-8',
+    phs: 'pinyin',
+    spaces: 'on',
+    pr: 'on',
+    vocab: 1,
+    sort: 'ord'
+  };
+};
 
-  request.get(english_url, function(error, response, body) {
-    // save english
+RM.english = RM.en = {};
+RM.en.getAndSave = function(talk, callback) {
+  var url = RM.subtitleUrl(talk.ted_talk_id, RM.TED.ENGLISH_CODE);
+
+  // request.get(url, function(error, response, body) {
+  fs.readFile('json/66.en.json', 'utf8', function(error, body) {
+    var json = JSON.parse(body);
+
+    var text = {},
+        i = 0;
+    
+    while(json[i]) {
+      text[i] = json[i]['caption']['content'];
+      i = i + 1;
+    }
+
+    talk.subtitles.en.captions = json;
+    talk.subtitles.en.text = text;
+    talk.markModified('subtitles.en');
+    talk.save(function(error) {
+      if(error) { console.log('Failed to save talk: ' + error); return false; }
+      if(callback) { callback(talk); }
+    });
   });
+};
 
-  request.get(mandarin_url, function(error, response, body) {
+RM.mandarin = RM.zh = {};
+RM.zh.getAndSave = function(talk, callback) {
+  // request.get(mandarin_url, function(error, response, body) {
+  fs.readFile('json/66.zh.json', 'utf8', function(error, body) {
     // for each mandarin, mandarinspot and save
+    var json = JSON.parse(body);
+    var i = 0;
+    var zh = [];
+    while(json[i]) {
+      zh.push(json[i]['caption']['content']);
+      i = i + 1;
+    }
+
+    var zh_blob = zh.join('\n\n');
+
+    var formData = RM.ms.defaultFormData();
+    formData.text = zh_blob;
+    
+    // request.post({ url: RM.ms.URL, formData: formData }, function(error, response, body) {
+    fs.readFile('html/66.mandarinspot.html', 'utf8', function(error, body) {
+      var $ = cheerio.load(body);
+
+      var vocab = JSON.parse($($('script').get(1)).html().match(/vocab = (.*?});/)[1]);
+
+      var $content = $('#content');
+      $content.find('table').remove(); // removing vocab table
+      $content.find(':empty[style]').remove(); // removing empty divs with style attrs
+      $content.find('[onclick]').each(function() { $(this).removeAttr('onclick'); }); // removing onclick attrs
+
+      var html = $content.html();
+      var delimeter = '<br><br>';
+      var lines = html.split(delimeter);
+      for(var i = 1, n = lines.length - 1; i < n; i++) {
+        lines[i] = '</span>' + lines[i] + '<span class="nann">';
+      }
+
+      var html = {};
+      for(var i = 0, n = lines.length; i < n; i++) {
+        $ = cheerio.load(lines[i]);
+        $(':empty').remove();
+        html[i] = $.html();
+      }
+
+      talk.subtitles.zh.captions = json;
+      talk.subtitles.zh.text = zh;
+      talk.subtitles.zh.html = html;
+      talk.subtitles.zh.vocab = vocab;
+      talk.markModified('subtitles.zh');
+      talk.save(function(error) {
+        if(error) { console.log('Failed to save talk: ' + error); return false; }
+        if(callback) callback(talk);
+      });
+    });
+  });
+};
+
+RM.getAndSave = function(ted_talk_id) {
+  Talk.remove({ ted_talk_id: ted_talk_id }, function(error) {
+    Talk.create({ ted_talk_id: ted_talk_id }, function(error, talk) {
+      RM.en.getAndSave(talk);
+      RM.zh.getAndSave(talk, function(talk) { mongoose.disconnect(); });
+    });
   });
 };
 
 var ted_talk_id = process.argv[2];
 
-RM.parseAndSave(ted_talk_id);
+mongoose.connect(RM.mongoose.uri);
 
-// get zh-cn
-// how to save all async?
-// get en
-
-// request.get('https://api.ted.com/v1/talks/1/subtitles.json?api-key=thbn678cjn86b5jtunacgque&language=zh-cn', function(error, response, body) {
-//   var resp = JSON.parse(body);
-//   console.log(resp);
-// });
-
-// // e=utf-8&text=%E9%9D%9E%E5%B8%B8%E6%84%9F%E8%B0%A2%E3%80%82%0D%0A&phs=pinyin&spaces=on&pr=on&vocab=1&sort=ord
-// var formData = {
-//   e: 'utf-8',
-//   phs: 'pinyin',
-//   spaces: 'on',
-//   pr: 'on',
-//   vocab: 1,
-//   sort: 'ord'
-// };
-// 
-// formData.text = '我想引用一个 名叫彼得·梅达沃的伟大科学家的话 来结束今天的演讲。 我引用的这句话是： 为人类而敲响的钟声 就像高山上的牛的钟声一样。 它们系在我们的脖子上， 如果它们不能发出和谐悦耳的声音， 那么一定是我们的错。';
-// 
-// request.post({ url: 'http://mandarinspot.com/annotate', formData: formData }, function(error, response, body) {
-//   var $ = cheerio.load(body);
-//   var vocab = JSON.parse($($('script').get(1)).html().match(/vocab = ({[^;]*);/)[1]);
-//   var $content = $('#content');
-//   $content.find('table').remove(); // removing vocab table
-//   $content.find(':empty[style]').remove(); // removing empty divs with style attrs
-//   $content.find('[onclick]').each(function() { $(this).removeAttr('onclick'); }); // removing onclick attrs
-//   console.log($content.html());
-// });
+var db = mongoose.connection;
+db.once('open', function() {
+  RM.getAndSave(ted_talk_id);
+});
