@@ -1,6 +1,29 @@
-var http = require('http');
-http.createServer(function(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello world\n');
-}).listen(1337, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:1337');
+var mongoose = require('mongoose'),
+    express = require('express'),
+    RM = require('./readmandarin.js').RM,
+    Talk = require('./models/talk').Talk,
+    app = express();
+
+mongoose.connect(RM.mongoose.uri);
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+app.get('/', function(req, res) {
+  Talk.findOne(function(error, talk) {
+    if(error) {
+      res.send(error, 500);
+      return console.error(error);
+    }
+    if(talk) {
+      res.send(talk); 
+    }
+    else {
+      res.send('No talks found...');
+    }
+  });
+});
+
+var server = app.listen(3000, function() {
+  console.log('listening: ' + server.address().port);
+});

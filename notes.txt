@@ -39,5 +39,6 @@ talk has many subtitles
 
 node + nosql + angular
 
-API -->
-  
+API?
+
+API separate from server?
