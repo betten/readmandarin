@@ -3,7 +3,7 @@ var request = require('request'),
     mongoose = require('mongoose'),
     fs = require('fs');
 
-Talk = require('./models/talk').Talk;
+var Talk = require('./app/models/talk');
 
 ReadMandarin = RM = {};
 
@@ -142,4 +142,4 @@ RM.getAndSave = function(ted_talk_id) {
   });
 };
 
-module.exports.ReadMandarin = module.exports.RM = RM;
+module.exports = ReadMandarin;

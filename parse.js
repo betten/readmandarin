@@ -1,5 +1,5 @@
 var mongoose = require('mongoose'),
-    RM = require('./readmandarin').RM;
+    RM = require('./readmandarin');
 
 var ted_talk_id = process.argv[2];
 
