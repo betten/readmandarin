@@ -10,6 +10,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 require('./config/routes')(app);
 
+app.use(express.static('./public'));
+
 var server = app.listen(3000, function() {
   console.log('listening: ' + server.address().port);
 });
