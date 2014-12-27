@@ -9,7 +9,7 @@ exports.index = function(req, res) {
 };
 
 exports.show = function(req, res) {
-  Talk.findOne({ ted_talk_id: req.params.id }, function(error, talk) {
+  Talk.findOne({ ted_talk_id: req.params.ted_talk_id }, function(error, talk) {
     if(error) return res.send(error);
     res.json(talk);
   });
@@ -18,6 +18,13 @@ exports.show = function(req, res) {
 exports.add = function(req, res) {
   RM.getAndSave(req.param('ted_talk_id'), function(error, talk) {
     if(error) return res.send(error);
-    res.json(talk);
+    res.json({ id: talk.id, ted_talk_id: talk.ted_talk_id });
+  });
+};
+
+exports.exists = function(req, res) {
+  Talk.count({ ted_talk_id: req.params.ted_talk_id }, function(error, count) {
+    if(error) return res.send(error);
+    res.send({ ted_talk_id: req.params.ted_talk_id, exists: !!count });
   });
 };

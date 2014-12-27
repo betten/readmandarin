@@ -42,10 +42,12 @@ angular.module('ReadMandarin', ['ngRoute', 'ngSanitize'])
       $scope.vocab = talk.subtitles.zh.vocab;
     });
   })
-  .controller('Add', function($scope, $http) {
+  .controller('Add', function($scope, $http, $location) {
     $scope.save = function() {
+      $scope.loading = true;
       $http.post('/api/talks/add', $scope.talk).success(function(data) {
         console.log(data);
+        $location.path('/talks/' + data.ted_talk_id);
       });
     };
   });
