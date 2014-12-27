@@ -3,6 +3,11 @@ var Schema = mongoose.Schema;
 
 var TalkSchema = new Schema({
   ted_talk_id: Number,
+  name: String,
+  description: String,
+  slug: String,
+  recorded_at: Date,
+  published_at: Date,
   title: String,
   subtitles: {
     en: {
