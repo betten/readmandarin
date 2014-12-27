@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TalkSchema = new Schema({
-  ted_talk_id: Number,
+  ted_talk_id: { type: Number, required: true },
   name: String,
   description: String,
   slug: String,
