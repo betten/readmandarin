@@ -27,17 +27,21 @@ angular.module('ReadMandarin', ['ngRoute', 'ngSanitize'])
     });
   })
   .controller('Talk', function($scope, $http, $routeParams) {
-    $http.get('/api/talks/' + $routeParams.ted_talk_id).success(function(data) {
-      var talk = data,
-          captions = [];
+    $http.get('/api/talks/' + $routeParams.ted_talk_id).success(function(talk) {
+      var captions = [], zh = [], en = [];
 
       for(var i = 0, n = talk.subtitles.zh.count; i < n; i++) {
-        captions.push({ 
-          en: talk.subtitles.en.text[i],
-          zh: talk.subtitles.zh.text[i] //talk.subtitles.zh.html[i]
-        });
+        if(i > 0 && talk.subtitles.en.captions[i].caption.startOfParagraph) {
+          captions.push({ en: en.join(' '), zh: zh.join(' ') });
+          en = [];
+          zh = [];
+        }
+
+        en.push(talk.subtitles.en.text[i]);
+        zh.push(talk.subtitles.zh.html[i]); //text[i]);
       }
 
+      $scope.name = talk.name;
       $scope.captions = captions;
       $scope.vocab = talk.subtitles.zh.vocab;
     });

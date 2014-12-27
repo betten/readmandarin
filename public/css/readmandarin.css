@@ -1,0 +1,18 @@
+#talk {
+}
+#talk tr {
+}
+#talk td {
+  padding-bottom: 20px;
+  vertical-align: top;
+  width: 50%;
+}
+#talk .zh .iann {
+  display: inline-block;
+  text-align: center;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+#talk .zh .py {
+  color: #c00;
+}
