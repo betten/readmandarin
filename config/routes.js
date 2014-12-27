@@ -1,7 +1,12 @@
-var talks = require('../app/controllers/talks');
+var talks = require('../app/controllers/talks'),
+    path = require('path');
 
 module.exports = function(app) {
-  app.get('/', talks.index);
-  app.get('/talks', talks.index);
-  app.get('/talks/:id', talks.show);
+  app.get('/api/talks', talks.index);
+  app.post('/api/talks/add', talks.add);
+  app.get('/api/talks/:id', talks.show);
+
+  app.get('/', function(req, res) {
+    res.sendFile(path.resolve(__dirname, '../public/index.html'));
+  });
 };

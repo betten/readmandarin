@@ -42,3 +42,19 @@ node + nosql + angular
 API?
 
 API separate from server?
+
+-------------------
+http://thenodeway.io/introduction/
+http://loopback.io/getting-started/
+https://github.com/madhums/node-express-mongoose-demo
+http://pixelhandler.com/posts/develop-a-restful-api-using-nodejs-with-express-and-mongoose
+http://scotch.io/tutorials/creating-a-single-page-todo-app-with-node-and-angular
+http://expressjs.com/guide/using-template-engines.html
+http://theholmesoffice.com/tag/node-js/
+http://en.wikipedia.org/wiki/ECMAScript#ECMAScript_Harmony_.286th_Edition.29
+http://stackoverflow.com/questions/9230932/file-structure-of-mongoose-nodejs-project
+http://nodejs.org/api/debugger.html
+
+http://mandarinspot.com/annotate
+http://www.mdbg.net/chindict/chindict.php?page=cc-cedict
+

@@ -4,6 +4,7 @@
   "description": "an app to practice reading mandarin",
   "main": "example.js",
   "dependencies": {
+    "body-parser": "^1.10.0",
     "cheerio": "^0.18.0",
     "express": "^4.10.6",
     "mongodb": "^1.4.25",

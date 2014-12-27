@@ -1,0 +1,8 @@
+<a href="#/talks">back to all talks</a>
+
+<table>
+  <tr ng-repeat="caption in captions">
+    <td>{{caption.en}}</td>
+    <td ng-bind-html="caption.zh"></td>
+  </tr>
+</table>

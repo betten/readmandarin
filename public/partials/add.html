@@ -1,0 +1,5 @@
+<a href="#/talks">back to all talks</a>
+<form name="add_talk">
+  <label>TED Talk ID: <input type="text" name="ted_talk_id" ng-model="talk.ted_talk_id" required /></label>
+  <button ng-click="save()" ng-disabled="add_talk.$invalid">Add</button>
+</form>
