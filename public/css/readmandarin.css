@@ -3,7 +3,7 @@
 #talk tr {
 }
 #talk td {
-  padding-bottom: 20px;
+  padding: 5px 5px 20px 5px;
   vertical-align: top;
   width: 50%;
 }
@@ -13,6 +13,15 @@
   vertical-align: bottom;
   white-space: nowrap;
 }
+#talk .zh .zh {
+  cursor: pointer;
+}
+#talk .zh .zh:hover {
+  background: yellow;
+}
 #talk .zh .py {
   color: #c00;
+}
+#talk .popover strong {
+  font-size: 3em;
 }

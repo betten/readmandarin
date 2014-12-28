@@ -27,6 +27,39 @@ angular.module('ReadMandarin', ['ngRoute', 'ngSanitize'])
     });
   })
   .controller('Talk', function($scope, $http, $routeParams) {
+    $scope.vocab = {};
+
+    $scope.googleTranslate = function(e) {
+      var $target = $(e.target);
+
+      if($target.hasClass('zh') && $target.parents('.ann').length) { 
+        window.open('https://translate.google.com/#zh-CN/en/' + $target.text(), '_blank');
+      }
+    };
+
+    $scope.lookup = function(e) { 
+      var $target = $(e.target);
+
+      if($target.hasClass('zh') && $target.parents('.ann').length) { 
+        var vocab = $scope.vocab[$target.text()];
+        var $py = $target.siblings('.py');
+
+        var html = '<strong>' + $target.text() + '</strong> (' + vocab[5] + ', <em>' + vocab[0].join(', ') + '</em>)<br />' + vocab[1].join(', ');
+
+        $py.popover({
+          content: html,
+          html: true,
+          placement: 'top',
+          trigger: 'manual',
+          viewport: 'body'
+        }).popover('show');
+      } 
+    };
+
+    $scope.closePopover = function(e) {
+      $('.py').popover('destroy');
+    };
+
     $http.get('/api/talks/' + $routeParams.ted_talk_id).success(function(talk) {
       var captions = [], zh = [], en = [];
 
@@ -45,6 +78,7 @@ angular.module('ReadMandarin', ['ngRoute', 'ngSanitize'])
       $scope.captions = captions;
       $scope.vocab = talk.subtitles.zh.vocab;
     });
+
   })
   .controller('Add', function($scope, $http, $location) {
     $scope.save = function() {
