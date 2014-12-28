@@ -3,8 +3,14 @@ var Schema = mongoose.Schema;
 
 var TalkSchema = new Schema({
   ted_talk_id: { type: Number, required: true },
-  name: String,
-  description: String,
+  name: {
+    en: String,
+    zh: String
+  },
+  description: {
+    en: String,
+    zh: String
+  },
   slug: String,
   recorded_at: Date,
   published_at: Date,
