@@ -22,6 +22,15 @@
 #talk .zh .py {
   color: #c00;
 }
+#talk .zh .zh-text {
+  cursor: pointer;
+}
 #talk .popover strong {
   font-size: 3em;
+}
+#talks .panel:hover {
+  background: #eee;
+}
+#talks .panel h3 {
+  margin-top: 0;
 }

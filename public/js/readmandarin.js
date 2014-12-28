@@ -29,10 +29,12 @@ angular.module('ReadMandarin', ['ngRoute', 'ngSanitize'])
   .controller('Talk', function($scope, $http, $routeParams) {
     $scope.vocab = {};
 
+    $scope.pinyin_visible = true;
+
     $scope.googleTranslate = function(e) {
       var $target = $(e.target);
 
-      if($target.hasClass('zh') && $target.parents('.ann').length) { 
+      if(($target.hasClass('zh') && $target.parents('.ann').length) || $target.hasClass('zh-text')) { 
         window.open('https://translate.google.com/#zh-CN/en/' + $target.text(), '_blank');
       }
     };
@@ -61,17 +63,19 @@ angular.module('ReadMandarin', ['ngRoute', 'ngSanitize'])
     };
 
     $http.get('/api/talks/' + $routeParams.ted_talk_id).success(function(talk) {
-      var captions = [], zh = [], en = [];
+      var captions = [], zh = { html: [], text: [] }, en = [];
 
       for(var i = 0, n = talk.subtitles.zh.count; i < n; i++) {
         if(i > 0 && talk.subtitles.en.captions[i].caption.startOfParagraph) {
-          captions.push({ en: en.join(' '), zh: zh.join(' ') });
+          captions.push({ en: en.join(' '), zh: { html: zh.html.join(' '), text: zh.text.join(' ') } });
           en = [];
-          zh = [];
+          zh.html = [];
+          zh.text = [];
         }
 
         en.push(talk.subtitles.en.text[i]);
-        zh.push(talk.subtitles.zh.html[i]); //text[i]);
+        zh.html.push(talk.subtitles.zh.html[i]); 
+        zh.text.push(talk.subtitles.zh.text[i]);
       }
 
       $scope.name = talk.name;

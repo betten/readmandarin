@@ -1,8 +1,10 @@
-<div class="panel panel-default" ng-repeat="talk in talks">
-  <div class="panel-heading">
-    <h3 class="panel-title"><a href="/#talks/{{talk.ted_talk_id}}">{{talk.name.en}} / {{talk.name.zh}}</a></h3>
+<div id="talks">
+  <div class="panel panel-default" ng-repeat="talk in talks">
+    <div class="panel-body">
+      <h3><a href="/#talks/{{talk.ted_talk_id}}">{{talk.name.en}} / {{talk.name.zh}}</a></h3>
+      <div>{{talk.description.en}} / {{talk.description.zh}}</div>
+    </div>
   </div>
-  <div class="panel-body">{{talk.description.en}} / {{talk.description.zh}}</div>
 </div>
 
 <a href="#/talks/add" class="btn btn-default">Add Talk</a>

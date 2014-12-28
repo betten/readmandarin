@@ -1,13 +1,16 @@
 <h2>{{name.en}}</h2>
 <h3>{{name.zh}}</h2>
 
-<a href="#/talks">back to all talks</a>
+<a href="#/talks">back to all talks</a> | <label>Show Pinyin: <input type="checkbox" ng-checked="pinyin_visible" ng-click="pinyin_visible = !pinyin_visible"/></label>
 
 <br /><br />
 
 <table id="talk">
   <tr ng-repeat="caption in captions">
     <td class="en">{{caption.en}}</td>
-    <td class="zh" ng-mouseover="lookup($event)" ng-mouseout="closePopover($event)" ng-click="googleTranslate($event)" ng-bind-html="caption.zh"></td>
+    <td class="zh">
+      <div class="zh-html" ng-show="pinyin_visible" ng-mouseover="lookup($event)" ng-mouseout="closePopover($event)" ng-click="googleTranslate($event)" ng-bind-html="caption.zh.html"></div>
+      <div class="zh-text" ng-show="!pinyin_visible" ng-click="googleTranslate($event)">{{caption.zh.text}}</div>
+    </td>
   </tr>
 </table>
