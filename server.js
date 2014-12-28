@@ -18,6 +18,6 @@ app.use(express.static('./public'));
 require('./config/routes')(app);
 
 
-var server = app.listen(3000, function() {
+var server = app.listen(process.env.PORT || 3000, function() {
   console.log('listening: ' + server.address().port);
 });
