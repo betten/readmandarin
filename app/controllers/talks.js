@@ -9,7 +9,7 @@ var exists = function(ted_talk_id, callback) {
 };
 
 exports.index = function(req, res) {
-  Talk.find({}, 'id ted_talk_id name', function(error, talks) {
+  Talk.find({}, 'id ted_talk_id name description', function(error, talks) {
     if(error) return res.send(error);
     res.json(talks);
   });

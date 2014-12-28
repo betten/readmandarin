@@ -3,7 +3,8 @@
 <br /><br />
 
 <form name="add_talk" ng-show="!loading">
-  <label>TED Talk ID: <input type="text" name="ted_talk_id" ng-model="talk.ted_talk_id" required /></label>
-  <button ng-click="save()" ng-disabled="add_talk.$invalid">Add</button>
+  <label for="ted_talk_id">TED Talk ID: </label>
+  <input type="text" name="ted_talk_id" ng-model="talk.ted_talk_id" required />
+  <button ng-click="save()" ng-disabled="add_talk.$invalid" class="btn btn-default">Add</button>
 </form>
 <div id="loading" ng-show="loading">Loading... <img src="/images/loading.gif" /></div>
