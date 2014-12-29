@@ -22,6 +22,18 @@ exports.show = function(req, res) {
   });
 };
 
+exports.search = function(req, res) {
+  var query = req.param('query');
+
+  RM.TED.talks.search(query, RM.TED.ENGLISH_CODE, function(error, response, body) {
+    if(error) return res.send(error);
+
+    var json = JSON.parse(body);
+
+    res.json(json.results);
+  });
+};
+
 exports.add = function(req, res) {
   var ted_talk_id = req.param('ted_talk_id');
 

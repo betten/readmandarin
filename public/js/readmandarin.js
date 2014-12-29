@@ -85,10 +85,15 @@ angular.module('ReadMandarin', ['ngRoute', 'ngSanitize'])
 
   })
   .controller('Add', function($scope, $http, $location) {
-    $scope.save = function() {
+    $scope.search = function() {
+      $http.post('/api/talks/search', { query: $scope.query }).success(function(results) {
+        $scope.results = results;
+      });
+    };
+
+    $scope.save = function(ted_talk_id) {
       $scope.loading = true;
-      $http.post('/api/talks/add', $scope.talk).success(function(data) {
-        console.log(data);
+      $http.post('/api/talks/add', { ted_talk_id: ted_talk_id }).success(function(data) {
         $location.path('/talks/' + data.ted_talk_id);
       });
     };
